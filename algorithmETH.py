@@ -15,7 +15,7 @@ class AlgorithmETH:
 		# stop calls
 		self.stopWinMACD = self.tassa+0.1/self.moltiplicatore #
 		self.stopLossMACD = (0.015)/self.moltiplicatore #
-		self.stopWinMACDs = self.tassa+0.1/self.moltiplicatore
+		self.stopWinMACDs = self.tassa+0.007/self.moltiplicatore
 		self.stopLossMACDs = (0.000)/self.moltiplicatore
 		self.stopWinBollinger = self.tassa+0.4/self.moltiplicatore
 		self.stopLossBollinger = (0.01)/self.moltiplicatore
@@ -40,7 +40,7 @@ class AlgorithmETH:
 		sarM = self.df['psar_di'].iloc[t]==False
 		
 		Smacd = self.df[f'EMA{self.Breve}'].iloc[t]<self.df[f'EMA{self.Lunga}'].iloc[t]
-		SrocMACD =  self.df['rocM'].iloc[t]<0.5
+		SrocMACD =  self.df['rocM'].iloc[t]<0.2
 		SsarM = self.df['psar_di'].iloc[t]==True
 
 		if macd and aroonMACD:
