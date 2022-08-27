@@ -127,7 +127,7 @@ class AGENT:
 
 	def get_total_balance(self):
 		self.get_balance()
-		return f"Balance: {self.money}$+({self.staticMoney}$) / Crypto: {self.stocks}{self.currentName[self.current]}({self.get_price()*self.stocks}$)({self.get_price()}ETH/$) / Homecash: {self.euro}€"
+		return f"Balance: {self.money}$+({self.staticMoney}$) / Crypto: {self.stocks}{self.currentName[self.current]}({self.get_price()*self.stocks}$)({self.get_price()}ETH/$) / Total(ETH+BUSD): {self.money+self.get_price()*self.stocks}$ /Homecash: {self.euro}€"
 
 
 	def get_current_state(self, data):
