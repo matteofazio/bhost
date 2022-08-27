@@ -62,6 +62,7 @@ class AGENT:
 			if "short" not in self.A[0].strategia:
 				output = self.buy_order(0)
 			elif "short" in self.A[0].strategia:
+				self.shorting = True
 				output = self.sell_order(0)
 
 			k = 0
