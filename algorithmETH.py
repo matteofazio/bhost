@@ -46,7 +46,7 @@ class AlgorithmETH:
 		if macd and aroonMACD:
 			if sarM:
 				self.strategia = "MACD"
-		elif Smacd and SrocMACD:
+		elif Smacd and SrocMACD and False:
 			if SsarM:
 				self.short = True
 				self.strategia = "MACDshort"
