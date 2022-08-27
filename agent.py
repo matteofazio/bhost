@@ -211,7 +211,7 @@ class AGENT:
 				'symbol': 'ETHBUSD',
 				'side': 'SELL',
 				'type': 'MARKET',
-				'quantity': round(self.stocks,6),
+				'quantity': round(self.stocks,5),
 				'recvWindow': 60000
 			}
 		else:
@@ -219,7 +219,7 @@ class AGENT:
 				'symbol': 'ETHBUSD',
 				'side': 'SELL',
 				'type': 'MARKET',
-				'quantity': round(self.stocks/2,6),
+				'quantity': round(self.stocks,5),#/2
 				'recvWindow': 60000
 			}
 		v = self.client.new_order(**params)
