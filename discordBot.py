@@ -85,7 +85,7 @@ async def on_ready():
 						allowed_mentions = discord.AllowedMentions(everyone = True)
 						await client.get_channel(azioniCH).send(content="@everyone Stock transaction happened.", allowed_mentions=allowed_mentions)
 						r = Agent.get_current_state(get_data(Agent.currentName))
-						await message.channel.send(r)
+						await client.get_channel(azioniCH).channel.send(r)
 			except Exception as e:
 				print(e)
 				allowed_mentions = discord.AllowedMentions(everyone = True)
