@@ -87,6 +87,9 @@ async def on_ready():
 
 			except Exception as e:
 				print(e)
+				allowed_mentions = discord.AllowedMentions(everyone = True)
+				await client.get_channel(azioniCH).send(content=str(e), allowed_mentions=allowed_mentions)
+
 		elif SESSION==False:
 			try:
 				await asyncio.sleep(100)
