@@ -84,7 +84,8 @@ async def on_ready():
 						await client.get_channel(transazioniCH).send(r)	
 						allowed_mentions = discord.AllowedMentions(everyone = True)
 						await client.get_channel(azioniCH).send(content="@everyone Stock transaction happened.", allowed_mentions=allowed_mentions)
-
+						r = Agent.get_current_state(get_data(Agent.currentName))
+						await message.channel.send(r)
 			except Exception as e:
 				print(e)
 				allowed_mentions = discord.AllowedMentions(everyone = True)
@@ -115,7 +116,7 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.0.5")
+			await message.channel.send(f"B1.0.6")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
