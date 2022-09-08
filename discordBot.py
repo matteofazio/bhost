@@ -50,6 +50,7 @@ def check_book_time():
 	now = datetime.fromtimestamp(time()).strftime("%H:%M:%S").split(":")
 	now = int(now[1])
 	if (Last_minute+1)%60 <= now:
+		Last_minute = now
 		return True
 	return False
 
