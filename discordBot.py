@@ -21,6 +21,7 @@ attivitaCH = 1005245873883713546
 datiCH = 1005255394710528162
 transazioniCH = 1005968395927293962
 azioniCH = 1005245915931615393
+bookCH = 1017463347026858134
 
 def check_time():
 	global Last_update
@@ -49,6 +50,40 @@ def get_data(asset):
 	data0 = data0.set_index("Datetime").sort_index()
 
 	return [data0]
+
+def avg(v):
+	return sum(v)/len(v)
+
+def std(v):
+	if len(v)<=1:
+		return -1
+	medio = avg(v)
+	return pow( sum([(i-medio)**2 for i in v])/(len(v)-1) ,0.5)
+
+def getBook():
+	book = "https://api.binance.com/api/v3/depth?symbol=ETHBUSD&limit=15"
+	return requests.get(book).json()
+
+def printBookStatistics():
+	book = getBook()
+	asksSell = book['asks']
+	bidsBuy = book['bids']
+
+	quantitySell = [float(i[1]) for i in asksSell]
+	quantityBuy = [float(i[1]) for i in asksSell]
+	priceSell = [float(i[0]) for i in asksSell]
+	priceBuy = [float(i[0]) for i in asksSell]
+
+	sommaSell = sum(quantitySell)
+	sommaBuy = sum(quantitySell)
+
+	SellStd = std(quantitySell)
+	BuysStd = std(quantityBuy)
+
+	a = ",".join( [f"[{i[0]},{i[1]}]" for i in asksSell])
+	b = ",".join( [f"[{i[0]},{i[1]}]" for i in bidsBuy])
+
+	await client.get_channel(bookCH).send(f"asksSell:{a}\nbidsBuy:{b}\n{sommaSell}, {sommaBuy}, {SellStd}, {BuysStd}")
 
 def process_data(data):
 	if not Agent.dentro:
@@ -85,7 +120,8 @@ async def on_ready():
 						allowed_mentions = discord.AllowedMentions(everyone = True)
 						await client.get_channel(azioniCH).send(content="@everyone Stock transaction happened.", allowed_mentions=allowed_mentions)
 						r = Agent.get_current_state(get_data(Agent.currentName))
-						await client.get_channel(azioniCH).channel.send(r)
+						await client.get_channel(azioniCH).send(r)
+					printBookStatistics()
 			except Exception as e:
 				print(e)
 				allowed_mentions = discord.AllowedMentions(everyone = True)
@@ -116,7 +152,7 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.0.6")
+			await message.channel.send(f"B1.0.7")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
