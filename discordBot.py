@@ -62,7 +62,7 @@ def std(v):
 
 def getBook():
 	book = "https://api.binance.com/api/v3/depth?symbol=ETHBUSD&limit=15"
-	return requests.get(book).json()
+	return get(book).json()
 
 def printBookStatistics():
 	book = getBook()
@@ -122,7 +122,7 @@ async def on_ready():
 						r = Agent.get_current_state(get_data(Agent.currentName))
 						await client.get_channel(azioniCH).send(r)
 					
-						await client.get_channel(azioniCH).send(printBookStatistics())
+						await client.get_channel(bookCH).send(printBookStatistics())
 			except Exception as e:
 				print(e)
 				allowed_mentions = discord.AllowedMentions(everyone = True)
@@ -153,7 +153,7 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.0.7")
+			await message.channel.send(f"B1.0.8")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
