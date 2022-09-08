@@ -83,7 +83,7 @@ def printBookStatistics():
 	a = ",".join( [f"[{i[0]},{i[1]}]" for i in asksSell])
 	b = ",".join( [f"[{i[0]},{i[1]}]" for i in bidsBuy])
 
-	await client.get_channel(bookCH).send(f"asksSell:{a}\nbidsBuy:{b}\n{sommaSell}, {sommaBuy}, {SellStd}, {BuysStd}")
+	return f"asksSell:{a}\nbidsBuy:{b}\n{sommaSell}, {sommaBuy}, {SellStd}, {BuysStd}"
 
 def process_data(data):
 	if not Agent.dentro:
@@ -121,7 +121,8 @@ async def on_ready():
 						await client.get_channel(azioniCH).send(content="@everyone Stock transaction happened.", allowed_mentions=allowed_mentions)
 						r = Agent.get_current_state(get_data(Agent.currentName))
 						await client.get_channel(azioniCH).send(r)
-					printBookStatistics()
+					
+						await client.get_channel(bookCH).send(printBookStatistics())
 			except Exception as e:
 				print(e)
 				allowed_mentions = discord.AllowedMentions(everyone = True)
