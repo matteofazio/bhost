@@ -95,7 +95,7 @@ def printBookStatistics():
 
 	a = ",".join( [f"[{i[0]},{i[1]}]" for i in asksSell])
 	b = ",".join( [f"[{i[0]},{i[1]}]" for i in bidsBuy])
-	bookValues.append([sommaSell,sommaBuy,SellStd,BuysStd,Agent.price()])
+	bookValues.append([sommaSell,sommaBuy,SellStd,BuysStd,Agent.get_price()])
 	return f"asksSell:{a}\nbidsBuy:{b}\n{sommaSell}, {sommaBuy}, {SellStd}, {BuysStd}"
 
 def process_data(data):
