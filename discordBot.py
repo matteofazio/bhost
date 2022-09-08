@@ -13,6 +13,7 @@ import os
 client = discord.Client()
 SESSION = True
 Last_update = datetime.fromtimestamp(time()).strftime("%H:%M:%S")
+Last_minute = -1
 Agent = AGENT()
 
 # id canali
@@ -22,6 +23,9 @@ datiCH = 1005255394710528162
 transazioniCH = 1005968395927293962
 azioniCH = 1005245915931615393
 bookCH = 1017463347026858134
+
+# statistiche varie
+bookValues = []
 
 def check_time():
 	global Last_update
@@ -39,6 +43,14 @@ def check_time():
 		Last_update = datetime.fromtimestamp(time()).strftime("%H:%M:%S")
 		return True
 
+	return False
+
+def check_book_time():
+	global Last_minute
+	now = datetime.fromtimestamp(time()).strftime("%H:%M:%S").split(":")
+	now = int(now[1])
+	if (Last_minute+1)%60 <= now:
+		return True
 	return False
 
 def get_data(asset):
@@ -65,6 +77,7 @@ def getBook():
 	return get(book).json()
 
 def printBookStatistics():
+	global bookValues
 	book = getBook()
 	asksSell = book['asks']
 	bidsBuy = book['bids']
@@ -82,7 +95,7 @@ def printBookStatistics():
 
 	a = ",".join( [f"[{i[0]},{i[1]}]" for i in asksSell])
 	b = ",".join( [f"[{i[0]},{i[1]}]" for i in bidsBuy])
-
+	bookValues.append([sommaSell,sommaBuy,SellStd,BuysStd,Agent.price()])
 	return f"asksSell:{a}\nbidsBuy:{b}\n{sommaSell}, {sommaBuy}, {SellStd}, {BuysStd}"
 
 def process_data(data):
@@ -107,8 +120,9 @@ async def on_ready():
 	while True:
 		if SESSION==True:
 			try:
-				await asyncio.sleep(10)
-				await client.get_channel(bookCH).send(printBookStatistics())
+				await asyncio.sleep(15)
+				if check_book_time():
+					await client.get_channel(bookCH).send(printBookStatistics())
 				if check_time():
 					now = datetime.fromtimestamp(time()).strftime("%H:%M")
 					await client.get_channel(attivitaCH).send(f"Connection check({now}).")
@@ -151,14 +165,16 @@ async def on_message(message):
 			SESSION = -1
 			await client.close()
 		elif message.content=="help" or message.content=="h":
-			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nenter/exit e")
+			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nbook\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.0.7")
+			await message.channel.send(f"B1.0.9")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
 		elif message.content=="balance" or message.content=="b":
 			await message.channel.send(Agent.get_total_balance())
+		elif message.content=="book":
+			await message.channel.send(f"{bookValues}")
 		elif message.content=="state" or message.content=="c": # c di current state
 			r = Agent.get_current_state(get_data(Agent.currentName))
 			await message.channel.send(r)
