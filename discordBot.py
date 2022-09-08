@@ -122,7 +122,7 @@ async def on_ready():
 						r = Agent.get_current_state(get_data(Agent.currentName))
 						await client.get_channel(azioniCH).send(r)
 					
-						await client.get_channel(bookCH).send(printBookStatistics())
+						await client.get_channel(azioniCH).send(printBookStatistics())
 			except Exception as e:
 				print(e)
 				allowed_mentions = discord.AllowedMentions(everyone = True)
