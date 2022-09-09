@@ -89,7 +89,7 @@ def printBookStatistics():
 	priceBuy = [float(i[0]) for i in bidsBuy]
 
 	sommaSell = round(sum(quantitySell),2)
-	sommaBuy = round(sum(quantitySell),2)
+	sommaBuy = round(sum(quantityBuy),2)
 
 	SellStd = round(std(priceSell),3)
 	BuysStd = round(std(priceBuy),3)
