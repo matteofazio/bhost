@@ -84,9 +84,9 @@ def printBookStatistics():
 	bidsBuy = book['bids']
 
 	quantitySell = [float(i[1]) for i in asksSell]
-	quantityBuy = [float(i[1]) for i in asksSell]
+	quantityBuy = [float(i[1]) for i in bidsBuy]
 	priceSell = [float(i[0]) for i in asksSell]
-	priceBuy = [float(i[0]) for i in asksSell]
+	priceBuy = [float(i[0]) for i in bidsBuy]
 
 	sommaSell = round(sum(quantitySell),2)
 	sommaBuy = round(sum(quantitySell),2)
