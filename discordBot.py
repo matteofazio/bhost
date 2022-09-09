@@ -91,8 +91,8 @@ def printBookStatistics():
 	sommaSell = round(sum(quantitySell),2)
 	sommaBuy = round(sum(quantitySell),2)
 
-	SellStd = round(std(quantitySell),3)
-	BuysStd = round(std(quantityBuy),3)
+	SellStd = round(std(priceSell),3)
+	BuysStd = round(std(priceBuy),3)
 
 	a = ",".join( [f"[{i[0]},{i[1]}]" for i in asksSell])
 	b = ",".join( [f"[{i[0]},{i[1]}]" for i in bidsBuy])
@@ -168,7 +168,7 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nbook\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.0.9")
+			await message.channel.send(f"B1.1.1")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
