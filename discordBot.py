@@ -168,14 +168,14 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nbook\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.1.0")
+			await message.channel.send(f"B1.0.9")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
 		elif message.content=="balance" or message.content=="b":
 			await message.channel.send(Agent.get_total_balance())
 		elif message.content=="book":
-			m = "["+",".join( [f"[{i[0]},{i[1]},{i[2]},{i[3]},{i[4]},{i[5]}]" for i in asksSell])+"]"
+			m = "["+",".join( [f"[{i[0]},{i[1]},{i[2]},{i[3]},{i[4]},{i[5]}]" for i in bookValues])+"]"
 			for i in range(0,len(m),1995):
 				await message.channel.send(m[i:i+1995])
 		elif message.content=="state" or message.content=="c": # c di current state
