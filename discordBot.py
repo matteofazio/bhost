@@ -162,11 +162,11 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+	global SESSION
 	if message.author == client.user:
 		return
 
 	if message.channel.id==azioniCH:
-		global SESSION
 		if message.content=="shutdown" or message.content=="s":
 			SESSION = not SESSION
 			await message.channel.send(f"Execution is now set to {SESSION}")
@@ -202,7 +202,6 @@ async def on_message(message):
 			if flag:
 				await client.get_channel(transazioniCH).send(r)
 	elif message.channel.id==spamCH:
-		global SESSION
 		if message.content=="book":
 			m = "["+",".join( [f"[{i[0]},{i[1]},{i[2]},{i[3]},{i[4]},{i[5]}]" for i in bookValues])+"]"
 			for i in range(0,len(m),1995):
