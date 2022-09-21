@@ -65,11 +65,9 @@ def get_data(asset):
 	data0["Datetime"] = data0["Datetime"]//1000 # in secondi
 	data0 = data0.set_index("Datetime").sort_index()
 
-	print(">>",ohlc,data0)
-	if ohlc == []:
+	if type(ohlc) == type([]):
 		ohlc = data0
 	else:
-		print(ohlc,data0)
 		ohlc = concat([ohlc, data0])
 		ohlc = ohlc.sort_index()
 	return [data0]
