@@ -4,7 +4,7 @@ import asyncio
 from yfinance import download
 from requests import get
 from time import time
-from pandas import DataFrame, to_datetime
+from pandas import DataFrame, to_datetime, concat
 from datetime import datetime
 from math import floor
 from agent import AGENT
@@ -23,9 +23,11 @@ datiCH = 1005255394710528162
 transazioniCH = 1005968395927293962
 azioniCH = 1005245915931615393
 bookCH = 1017463347026858134
+spamCH = 1022115220031811685
 
 # statistiche varie
 bookValues = []
+ohlc = []
 
 def check_time():
 	global Last_update
@@ -55,6 +57,7 @@ def check_book_time():
 	return False
 
 def get_data(asset):
+	global ohlc
 	SPAN = 500 # < 720
 
 	resp0 = get(f'https://api.binance.com/api/v3/klines?symbol={asset[0]}BUSD&interval=5m&limit={SPAN}')
@@ -62,6 +65,11 @@ def get_data(asset):
 	data0["Datetime"] = data0["Datetime"]//1000 # in secondi
 	data0 = data0.set_index("Datetime").sort_index()
 
+	if ohlc == []:
+		ohlc = data0
+	else:
+		ohlc = concat([ohlc, data0])
+		ohlc = ohlc.sort_index()
 	return [data0]
 
 def avg(v):
@@ -174,10 +182,6 @@ async def on_message(message):
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
 		elif message.content=="balance" or message.content=="b":
 			await message.channel.send(Agent.get_total_balance())
-		elif message.content=="book":
-			m = "["+",".join( [f"[{i[0]},{i[1]},{i[2]},{i[3]},{i[4]},{i[5]}]" for i in bookValues])+"]"
-			for i in range(0,len(m),1995):
-				await message.channel.send(m[i:i+1995])
 		elif message.content=="state" or message.content=="c": # c di current state
 			r = Agent.get_current_state(get_data(Agent.currentName))
 			await message.channel.send(r)
@@ -197,7 +201,14 @@ async def on_message(message):
 			flag, r = Agent.sell(datetime.fromtimestamp(time()).strftime("%H:%M:%S"),get_data(Agent.currentName),True)
 			if flag:
 				await client.get_channel(transazioniCH).send(r)
-
+	elif message.channel.id==spamCH:
+		global SESSION
+		if message.content=="book":
+			m = "["+",".join( [f"[{i[0]},{i[1]},{i[2]},{i[3]},{i[4]},{i[5]}]" for i in bookValues])+"]"
+			for i in range(0,len(m),1995):
+				await message.channel.send(m[i:i+1995])
+		if message.content=="ohlc":
+			await message.channel.send(ohlc)
 	else:
 		#print(message.channel.id)
 		allowed_mentions = discord.AllowedMentions(everyone = True)
