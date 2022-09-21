@@ -163,6 +163,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
 	global SESSION
+	global ohlc
 	if message.author == client.user:
 		return
 
@@ -208,11 +209,11 @@ async def on_message(message):
 				await message.channel.send(m[i:i+1995])
 		if message.content=="ohlc":
 			msg = ""
-			for i in len(df):
-				for j in len(df.iloc[i]):
-					msg += str(df.iloc[i][j])+" "
+			for i in len(ohlc):
+				for j in len(ohlc.iloc[i]):
+					msg += str(ohlc.iloc[i][j])+" "
 				msg = msg[:-1]+"\n"
-			await message.channel.send(ohlc)
+			await message.channel.send(msg)
 	else:
 		#print(message.channel.id)
 		allowed_mentions = discord.AllowedMentions(everyone = True)
