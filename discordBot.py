@@ -9,6 +9,8 @@ from datetime import datetime
 from math import floor
 from agent import AGENT
 import os
+from yfinance import download
+from datetime import datetime, timedelta
 
 client = discord.Client()
 SESSION = True
@@ -60,16 +62,19 @@ def get_data(asset):
 	global ohlc
 	SPAN = 500 # < 720
 
-	resp0 = get(f'https://api.binance.com/api/v3/klines?symbol={asset[0]}BUSD&interval=5m&limit={SPAN}')
+	"""resp0 = get(f'https://api.binance.com/api/v3/klines?symbol={asset[0]}BUSD&interval=5m&limit={SPAN}')
 	data0 = DataFrame(resp0.json()).rename(columns={0:"Datetime",1:"Open",2:"High",3:"Low",4:"Close",5:"Volume",8:"Trades"})
 	data0["Datetime"] = data0["Datetime"]//1000 # in secondi
 	data0 = data0.set_index("Datetime").sort_index()
-
+	
 	if type(ohlc) == type([]):
 		ohlc = data0
 	else:
 		ohlc = concat([ohlc, data0]).drop_duplicates(keep='first')
 		ohlc = ohlc.sort_index()
+	"""
+	data0 = download("ETH-USD", start=datetime.now()-timedelta(hours=40), end=datetime.now(), interval="5m", auto_adjust=False, prepost=False).astype(float).sort_index()
+
 	return [data0]
 
 def avg(v):
@@ -177,7 +182,7 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nbook\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.1.1")
+			await message.channel.send(f"B1.1.3")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
@@ -208,7 +213,7 @@ async def on_message(message):
 			for i in range(0,len(m),1995):
 				await message.channel.send(m[i:i+1995])
 		if message.content=="ohlc":
-			m = ohlc[["Open","High","Low","Close","Volume"]].round(2).to_string(index=True).split("\n")
+			m = ohlc[["Open","High","Low","Close","Volume"]].astype(float).round(2).to_string(index=True).split("\n")
 			for i in range(0,len(m),10):
 				await message.channel.send("\n".join(m[i:i+10]))
 	else:
