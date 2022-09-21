@@ -63,7 +63,7 @@ def get_data(asset):
 	resp0 = get(f'https://api.binance.com/api/v3/klines?symbol={asset[0]}BUSD&interval=5m&limit={SPAN}')
 	data0 = DataFrame(resp0.json()).rename(columns={0:"Datetime",1:"Open",2:"High",3:"Low",4:"Close",5:"Volume",8:"Trades"})
 	data0["Datetime"] = data0["Datetime"]//1000 # in secondi
-	data0 = data0.set_index("Datetime").sort_index()
+	data0 = data0.set_index("Datetime").drop_duplicates(keep='first').sort_index()
 
 	if type(ohlc) == type([]):
 		ohlc = data0
