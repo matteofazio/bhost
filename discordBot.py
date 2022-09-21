@@ -68,6 +68,7 @@ def get_data(asset):
 	if ohlc == []:
 		ohlc = data0
 	else:
+		print(ohlc,data0)
 		ohlc = concat([ohlc, data0])
 		ohlc = ohlc.sort_index()
 	return [data0]
@@ -208,7 +209,7 @@ async def on_message(message):
 			for i in range(0,len(m),1995):
 				await message.channel.send(m[i:i+1995])
 		if message.content=="ohlc":
-			m = ohlc.to_string(index=True).split("\n")
+			m = ohlc[["Open","High","Low","Close","Volume"]].round(2).to_string(index=True).split("\n")
 			for i in range(0,len(m),10):
 				await message.channel.send("\n".join(m[i:i+10]))
 	else:
