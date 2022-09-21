@@ -208,7 +208,9 @@ async def on_message(message):
 			for i in range(0,len(m),1995):
 				await message.channel.send(m[i:i+1995])
 		if message.content=="ohlc":
-			await message.channel.send(ohlc.to_string(index=True))
+			m = ohlc.to_string(index=True)
+			for i in range(0,len(m),1995):
+				await message.channel.send(m[i:i+1995])
 	else:
 		#print(message.channel.id)
 		allowed_mentions = discord.AllowedMentions(everyone = True)
