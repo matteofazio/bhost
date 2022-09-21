@@ -209,8 +209,8 @@ async def on_message(message):
 				await message.channel.send(m[i:i+1995])
 		if message.content=="ohlc":
 			msg = ""
-			for i in len(ohlc):
-				for j in len(ohlc.iloc[i]):
+			for i in range(len(ohlc)):
+				for j in range(len(ohlc.iloc[i])):
 					msg += str(ohlc.iloc[i][j])+" "
 				msg = msg[:-1]+"\n"
 			await message.channel.send(msg)
