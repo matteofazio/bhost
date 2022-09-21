@@ -176,7 +176,7 @@ async def on_message(message):
 		elif message.content=="help" or message.content=="h":
 			await message.channel.send(f"help-h\nversion-v\nshutdown/execute-s\nbalance-b\nstate-c\nforce buy 0\nforce sell\nbook\nenter/exit e")
 		elif message.content=="version" or message.content=="v":
-			await message.channel.send(f"B1.1.2")
+			await message.channel.send(f"B1.1.1")
 		elif message.content=="enter" or message.content=="exit" or message.content=="e":
 			Agent.dentro = not Agent.dentro
 			await message.channel.send(f"Stato corrente aggiornato: dentro={Agent.dentro}")
@@ -209,7 +209,7 @@ async def on_message(message):
 		if message.content=="ohlc":
 			msg = ""
 			for i in len(df):
-				for j in len(df.iloc[i])
+				for j in len(df.iloc[i]):
 					msg += str(df.iloc[i][j])+" "
 				msg = msg[:-1]+"\n"
 			await message.channel.send(ohlc)
