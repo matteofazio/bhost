@@ -216,9 +216,5 @@ async def on_message(message):
 			m = ohlc[["Open","High","Low","Close","Volume"]].astype(float).round(2).to_string(index=True).split("\n")
 			for i in range(0,len(m),10):
 				await message.channel.send("\n".join(m[i:i+10]))
-	else:
-		#print(message.channel.id)
-		allowed_mentions = discord.AllowedMentions(everyone = True)
-		await message.channel.send(content="@everyone owo", allowed_mentions=allowed_mentions)
 
 client.run(os.environ['DISCORD_TOKEN'])
